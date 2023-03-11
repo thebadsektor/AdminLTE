@@ -236,7 +236,7 @@
           </li>
           <li class="nav-item">
             <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fa fa-columns"></i>
+              <i class="nav-icon fa fa-university"></i>
               <p>
                 Sangguniang Bayan
               </p>
@@ -268,7 +268,7 @@
           </li>
           <li class="nav-item">
             <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-money"></i>
+              <i class="nav-icon fas fa-money-bill"></i>
               <p>
                 Treasury
               </p>
