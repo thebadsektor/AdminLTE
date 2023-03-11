@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>LGU | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -177,7 +177,7 @@
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light">LGU</span>
     </a>
 
     <!-- Sidebar -->
@@ -188,7 +188,7 @@
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">Gerod Valyrian</a>
         </div>
       </div>
 
@@ -214,31 +214,67 @@
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
-                <i class="right fas fa-angle-left"></i>
+                <!-- <i class="right fas fa-angle-left"></i> -->
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="./index.html" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index2.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index3.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v3</p>
-                </a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                Admin
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-building"></i>
+              <p>
+                BPLS
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fa fa-columns"></i>
+              <p>
+                Sangguniang Bayan
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Human Resource
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-clock"></i>
+              <p>
+                Payroll
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>
+                RPT
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-money"></i>
+              <p>
+                Treasury
+              </p>
+            </a>
+          </li>
+          <!-- <li class="nav-item">
             <a href="pages/widgets.html" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
@@ -246,8 +282,8 @@
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>
-          </li>
-          <li class="nav-item">
+          </li> -->
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
@@ -840,7 +876,7 @@
               <p>Informational</p>
             </a>
           </li>
-        </ul>
+        </ul> -->
       </nav>
       <!-- /.sidebar-menu -->
     </div>
@@ -866,7 +902,13 @@
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+    <?php
 
+      include('database/connect.php');
+
+      $year_now = date('Y');
+
+    ?>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -876,9 +918,14 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
-
-                <p>New Orders</p>
+                  <?php
+                    $year = date("Y");
+                    $bplos = mysqli_query($conn, "SELECT sum(payment_total_amount_paid) as bpls_amount FROM `geo_bpls_payment` where payment_year = '$year_now' ");
+                    $bpls_amo = mysqli_fetch_assoc($bplos);
+                    $bpls_income = $bpls_amo['bpls_amount'];
+                    echo "<h3>".number_format($bpls_income, 2)."</h3>";
+                  ?>
+                  <p>Business Permit and Licensing</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
@@ -891,9 +938,13 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Bounce Rate</p>
+                  <?php
+                    $qqctc_tbl = mysqli_query($conn, "SELECT sum(cast(ctc_tbl.total_ammount_2 as decimal(22,2))) as total_ctc from ctc_tbl where ctc_tbl.ctc_status = 'paid' and year(ctc_tbl.date_issued) = '$year_now'");
+                    $row_ctc = mysqli_fetch_assoc($qqctc_tbl);
+                    $total_ctc = $row_ctc['total_ctc'];
+                    echo "<h3>".number_format($total_ctc, 2)."</h3>";
+                  ?>
+                  <p>Community Tax Certificate</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -906,9 +957,13 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
-
-                <p>User Registrations</p>
+                <?php
+                  $qqtreasury_transactions = mysqli_query($conn, "SELECT sum(cast(treasury_transactions.amount as decimal(22,2))) as total_misc from treasury_transactions inner join treasury_tbl on treasury_tbl.or_num = treasury_transactions.or_num where treasury_tbl.status = 'active' and treasury_tbl.department = 'MTO' and year(treasury_tbl.or_date) = '$year_now'");
+                  $row_misc = mysqli_fetch_assoc($qqtreasury_transactions);
+                  $total_misc = $row_misc['total_misc'];
+                  echo "<h3>".number_format($total_misc, 2)."</h3>";
+                ?>
+                <p>Miscellaneous</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
@@ -921,9 +976,99 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
+              <?php
+                $qqtres_rpta_or_main = mysqli_query($conn, "SELECT sum(cast(tres_rpta_or_main.amount as decimal(22,2))) as total_rpta from tres_rpta_or_main where tres_rpta_or_main.status = 'paid' and year(tres_rpta_or_main.or_num_date) = '$year_now'");
+                $row_rpta = mysqli_fetch_assoc($qqtres_rpta_or_main);
+                $total_rpta = $row_rpta['total_rpta'];
+                echo "<h3>".number_format($total_rpta, 2)."</h3>";
+                ?>
+                <p>Real Property Tax</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <?php
+                  $qqrhu = mysqli_query($conn, "SELECT sum(cast(treasury_transactions.amount as decimal(22,2))) as total_rhu from treasury_transactions inner join treasury_tbl on treasury_tbl.or_num = treasury_transactions.or_num where treasury_tbl.status = 'active' and treasury_tbl.department = 'RHU' and year(treasury_tbl.or_date) = '$year_now'");
+                  $row_rhu = mysqli_fetch_assoc($qqrhu);
+                  $total_rhu = $row_rhu['total_rhu'];
+                  echo "<h3>".number_format($total_rhu, 2)."</h3>";
+                ?>
+                <p>Rural Health Unit</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-secondary">
+              <div class="inner">
+                <?php
+                  $qqvf = mysqli_query($conn, "SELECT sum(cast(treasury_transactions.amount as decimal(22,2))) as total_vf from treasury_transactions inner join treasury_tbl on treasury_tbl.or_num = treasury_transactions.or_num where treasury_tbl.status = 'active' and treasury_tbl.department = 'VF' and year(treasury_tbl.or_date) = '$year_now'");
+                  $row_vf = mysqli_fetch_assoc($qqvf);
+                  $total_vf = $row_vf['total_vf'];
+                  echo "<h3>".number_format($total_vf, 2)."</h3>";
+                ?>
+                <p>Franchising</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+              <?php
+                $cancelled_bill = mysqli_query($conn,"SELECT SUM(treasury_transactions.amount) as cancelled from treasury_tbl inner join treasury_transactions on treasury_tbl.or_num = treasury_transactions.or_num where status='Cancelled' AND acc_codes LIKE '4-02-02-090%' AND YEAR(treasury_transactions.created_at) = '$year_now'");
+                $can_row = mysqli_fetch_assoc($cancelled_bill);
+                $cancelledBill = $can_row['cancelled'];
 
-                <p>Unique Visitors</p>
+                  $monthly_collection = mysqli_query($conn,"SELECT SUM(amount) as ws_total_amount FROM `treasury_transactions` WHERE acc_codes LIKE '4-02-02-090%' AND YEAR(created_at) = '$year_now'");
+                  $row = mysqli_fetch_assoc($monthly_collection);
+                  $monthli_ws_bill = $row['ws_total_amount'];
+                  $sh = $monthli_ws_bill - $cancelledBill;
+                  $sh;
+                  echo "<h3>".number_format($sh, 2)."</h3>";
+                ?>
+                <p>Waterworks</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-primary">
+              <div class="inner">
+              <?php
+                $qqtres_rpta_or_main = mysqli_query($conn, "SELECT sum(cast(tres_rpta_or_main.amount as decimal(22,2))) as total_rpta from tres_rpta_or_main where tres_rpta_or_main.status = 'paid' and year(tres_rpta_or_main.or_num_date) = '$year_now'");
+                $row_rpta = mysqli_fetch_assoc($qqtres_rpta_or_main);
+                $total_rpta = $row_rpta['total_rpta'];
+                echo "<h3>".number_format($total_rpta, 2)."</h3>";
+                ?>
+                <p>Real Property Tax</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
